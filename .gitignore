@@ -1,0 +1,6 @@
+*.o
+*.pdf
+client
+server
+receive
+sent
