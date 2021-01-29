@@ -82,5 +82,5 @@ void *ClientThread(void *param)
 {
 	Data data;
 	Client *client = (Client *)param;
-	SendFile(client->sock,path,path);
+	SendFile(client->sock,path);
 }

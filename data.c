@@ -21,12 +21,13 @@ ssize_t SendClient(int sock,Client *client)
     return write(sock, message,data.len);
 }
 
-ssize_t SendFile(int sock,char *pathname,char *filename)
+ssize_t SendFile(int sock,char *pathname)
 {
     Data data;
     data.type = File;
     int fd = open(pathname, O_RDONLY);
     int  sizeSent,sizeRemaining;
+    char *filename = strrchr(pathname,'/');
     off_t offset = 0;
     if (fd == -1)
     {
@@ -38,6 +39,7 @@ ssize_t SendFile(int sock,char *pathname,char *filename)
     fstat(fd,&fileStats);
     write(sock,&data,sizeof(data));
     write(sock,&fileStats,sizeof(struct stat));
+    filename = filename == NULL ? pathname: filename + 1;
     SendText(sock,filename);
     for(sizeRemaining = fileStats.st_size; sizeRemaining;sizeRemaining -= sizeSent)
     {
@@ -54,15 +56,20 @@ void GetFile(int sock)
     Data data;
     struct stat fileStats;
     int fd ;
+    off_t sizeRemaining,sizeSent,offset;
     char *file,*filename;
 
     read(sock,&fileStats,sizeof(struct stat));
     file = malloc(fileStats.st_size);
     read(sock,&data,sizeof(data));
     filename = GetText(sock,data);
-    read(sock,file,fileStats.st_size);
     fd = creat(filename,O_WRONLY | S_IRWXU | S_IRWXG | S_IRWXO);
-    write(fd,file,fileStats.st_size);
+    for(sizeRemaining = fileStats.st_size; sizeRemaining;sizeRemaining -= sizeSent)
+    {
+        sizeSent = recv(sock,file,fileStats.st_size,0);
+        write(fd,file,sizeSent);
+        printf("\rreceived %3d%%",100 - (sizeRemaining * 100)/fileStats.st_size);
+    }
     printf("%s downloaded sucessfully\n",filename);
     free(filename);
     free(file);

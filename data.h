@@ -40,6 +40,6 @@ char *GetText(int sock,Data data);
 Client **AddClient(Client **clients,char *name,int sock,int *count);
 Client **AddClientPointer(Client **clients,Client *client,int *count);
 Client *GetClient(int sock,Data data);
-ssize_t SendFile(int sock,char *pathname,char *filename);
+ssize_t SendFile(int sock,char *pathname);
 void GetFile(int sock);
 #endif // !DATARUCHDANE

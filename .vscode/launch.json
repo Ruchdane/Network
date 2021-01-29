@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["OEB_TD1.pdf"],
+            "args": ["0.0.0.0"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
