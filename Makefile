@@ -22,3 +22,5 @@ clean :
 properClean : clean
 	rm server
 	rm client
+	rm send
+	rm receive
