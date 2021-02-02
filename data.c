@@ -41,13 +41,7 @@ ssize_t SendFile(int sock,char *pathname)
     write(sock,&fileStats,sizeof(struct stat));
     filename = filename == NULL ? pathname: filename + 1;
     SendText(sock,filename);
-    for(sizeRemaining = fileStats.st_size; sizeRemaining;sizeRemaining -= sizeSent)
-    {
-        offset = fileStats.st_size - sizeRemaining;
-        sizeSent = sendfile(sock,fd,&offset,sizeRemaining);
-        printf("sent %.2f",(1 - sizeRemaining/fileStats.st_size)*100);
-    }
-    
+    sizeSent = sendfile(sock,fd,NULL,fileStats.st_size);
     close(fd);
 }
 
