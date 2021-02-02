@@ -86,6 +86,6 @@ void *ClientThread(void *param)
 	sem_post(&client->lock);
 
 	sem_wait(&client->lock);
-	SendFile(client->sock,"Beastars","Beastars");
+	SendFile(client->sock,"Beastars");
 	sem_post(&client->lock);
 }
