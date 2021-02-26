@@ -64,7 +64,7 @@ void GetFile(int sock)
         write(fd,file,sizeSent);
         printf("\rreceived %3d%%",100 - (sizeRemaining * 100)/fileStats.st_size);
     }
-    printf("%s downloaded sucessfully\n",filename);
+    printf("\r\n%s downloaded sucessfully\n",filename);
     free(filename);
     free(file);
 }

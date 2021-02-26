@@ -2,14 +2,14 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: gcc build active file",
+            "label": "make",
             "command": "make",
             "args": ["${fileBasenameNoExtension}"],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": [
-                "$gcc"
+                "$clang"
             ],
             "group": {
                 "kind": "build",

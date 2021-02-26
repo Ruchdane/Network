@@ -19,6 +19,8 @@
 
 typedef enum  DataType {Id,Test,ClientListe,File} DataType;
 
+#define BUFFSIZE = 1024
+
 typedef struct Data
 {
     DataType type;
