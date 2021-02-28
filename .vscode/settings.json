@@ -1,5 +1,17 @@
 {
     "files.associations": {
-        "data.h": "c"
+        "data.h": "c",
+        "reseaux.h": "c",
+        "pthread.h": "c",
+        "unistd.h": "c",
+        "errno.h": "c",
+        "string.h": "c",
+        "types.h": "c",
+        "stat.h": "c",
+        "winsock2.h": "c",
+        "ws2tcpip.h": "c",
+        "stdio.h": "c",
+        "semaphore.h": "c",
+        "fcntl.h": "c"
     }
 }
