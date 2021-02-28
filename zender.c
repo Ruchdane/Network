@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "data.h"
+// #include "data.h"
 
 int main(int argc,char *argv[])
 {
@@ -7,8 +7,12 @@ int main(int argc,char *argv[])
     GtkWidget *window;
 
     gtk_init(&argc, &argv);
-
+    #if defined(_WIN32)
+    gtk_builder_add_from_file(builder,"zender.glade",NULL);
+    #else
     builder =  gtk_builder_new_from_file("zender.glade");
+    #endif
+    
     window = GTK_WIDGET(gtk_builder_get_object(builder,"WindowMain"));
     gtk_builder_connect_signals(builder,NULL);
 

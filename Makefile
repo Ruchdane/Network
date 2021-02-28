@@ -1,11 +1,22 @@
+all :server client send receive zender
+
+ifeq ($(platform),windows)
+CC = i686-w64-mingw32-gcc
+GTKCFLAGS = `export PKG_CONFIG_PATH=/usr/i686-w64-mingw32/sys-root/mingw/lib/pkgconfig && pkg-config --cflags gtk+-3.0 pangocairo` -pipe -pthread
+GTKLIBS = `export PKG_CONFIG_PATH=/usr/i686-w64-mingw32/sys-root/mingw/lib/pkgconfig && pkg-config --libs gtk+-3.0 pangocairo`
+
+else
 CC = gcc
 GTKCFLAGS = `pkg-config --cflags gtk+-3.0` -rdynamic -pipe -pthread
-GTKLIBS = `pkg-config --libs gtk+-3.0`
+GTKLIBS = ` pkg-config --libs gtk+-3.0`
+endif
 
 CFLAGS = -g -pthread $(GTKCFLAGS)
 LIBS = $(GTKLIBS)
 
-all : server client send receive zender
+
+# %.o : %.c
+# 	$(CC)  $(CFLAGS) -c $^   $@ $(LIBS)
 
 server : reseaux.o server.o data.o
 	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
@@ -19,7 +30,7 @@ send : send.o reseaux.o data.o
 receive : receive.o reseaux.o data.o
 	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
 
-zender : data.o reseaux.o zender.o
+zender : zender.o
 	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
 
 clean :

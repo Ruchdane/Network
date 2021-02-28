@@ -32,6 +32,33 @@
             "cStandard": "gnu17",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "gcc-x64"
+        },
+        {
+            "name": "window",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/x86_64-w64-mingw32/include",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/gtk-3.0",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/cairo",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/pango-1.0",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/atk-1.0",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/cairo",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/pixman-1",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/freetype2",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/libpng15",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/gdk-pixbuf-2.0",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/libpng15",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include/glib-2.0",
+                "/usr/i686-w64-mingw32/sys-root/mingw/lib/glib-2.0/include",
+                "/usr/i686-w64-mingw32/sys-root/mingw/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/x86_64-w64-mingw32-gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "windows-gcc-x64"
         }
     ],
     "version": 4
