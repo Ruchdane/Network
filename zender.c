@@ -1,8 +1,8 @@
 #include <gtk/gtk.h>
+#include <stdbool.h>
 // #include "data.h"
 
-int main(int argc,char *argv[])
-{
+int main(int argc,char *argv[]){
     GtkBuilder *builder;
     GtkWidget *window;
 
@@ -22,19 +22,23 @@ int main(int argc,char *argv[])
     gtk_main();
 }
 
-void OnWindowMainDestroy()
-{
+void OnWindowMainDestroy(){
     gtk_main_quit();
 }
 
-void send_btn_clicked (GtkButton *send_btn, GtkFileChooserWidget *FileChoser)
-{
+void send_btn_clicked (GtkButton *send_btn, GtkFileChooserWidget *FileChoser){
     GSList * selection = gtk_file_chooser_get_files((GtkFileChooser *)FileChoser), *tmp;
     if( selection != NULL)
-    for(tmp = selection;tmp != NULL; tmp = tmp->next)
-    {
+    for(tmp = selection;tmp != NULL; tmp = tmp->next){
             g_print("%s\n",g_file_get_path((GFile *)tmp->data));
     }
     
     g_slist_free(selection);
+}
+
+void refreshBtnCLlcked (GtkButton *refreshBtn, GtkGrid *statusGrid){
+    static bool isInitialsed = true;
+    GtkWidget *main = gtk_grid_new();
+    if(isInitialsed) gtk_container_remove(GTK_CONTAINER(statusGrid),gtk_grid_get_child_at(GTK_GRID(statusGrid),0,0));
+    
 }

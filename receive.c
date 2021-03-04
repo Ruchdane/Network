@@ -1,8 +1,8 @@
 #include "reseaux.h"
-int sock;
+SOCKET sock;
 void end(int SIG)
 {
-	close(sock);
+	CLOSESOCKET(sock);
 	exit(0);
 }
 
@@ -12,11 +12,10 @@ int main(int argc, char *argv[])
 	
 	if(argc != 3 && argc != 2)
     {
-        printf("recieve usage\n recieve <IP address>\n");
-        printf("send  <IP address> <Pasword>\n");
+        printf("recieve usage\n\trecieve <IP address> [Password] [-p  <Port>]\n");
         exit(0);
     }
-    sock = createSocket(36002,argv[1],1);
+    sock = createSocket("36002",argv[1],1);
 	printf("Connecter\n");
 	if(argc == 3)
         SendText(sock,argv[2]);

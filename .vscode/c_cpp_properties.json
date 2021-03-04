@@ -23,21 +23,54 @@
                 "/usr/include/gdk-pixbuf-2.0",
                 "/usr/include/libmount",
                 "/usr/include/blkid",
-                 "/usr/include/glib-2.0",
-                 "/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+                "/usr/include/glib-2.0",
+                "/usr/lib/x86_64-linux-gnu/glib-2.0/include",
                 "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
-            "cStandard": "gnu17",
-            "cppStandard": "gnu++14",
-            "intelliSenseMode": "gcc-x64"
+            
+            
+            "intelliSenseMode": "gcc-x64",
+            "compilerArgs": [],
+            "intelliSenseModeIsExplicit": true,
+            "cStandardIsExplicit": true,
+            "cppStandardIsExplicit": true,
+            "compilerPathIsExplicit": true,
+            "browse": {
+                "path": [
+                    "/usr/include/gtk-3.0",
+                    "/usr/include/at-spi2-atk/2.0",
+                    "/usr/include/at-spi-2.0",
+                    "/usr/include/dbus-1.0",
+                    "/usr/lib/x86_64-linux-gnu/dbus-1.0/include",
+                    "/usr/include/gtk-3.0",
+                    "/usr/include/gio-unix-2.0",
+                    "/usr/include/cairo",
+                    "/usr/include/pango-1.0",
+                    "/usr/include/fribidi",
+                    "/usr/include/harfbuzz",
+                    "/usr/include/atk-1.0",
+                    "/usr/include/cairo",
+                    "/usr/include/pixman-1",
+                    "/usr/include/uuid",
+                    "/usr/include/freetype2",
+                    "/usr/include/libpng16",
+                    "/usr/include/gdk-pixbuf-2.0",
+                    "/usr/include/libmount",
+                    "/usr/include/blkid",
+                    "/usr/include/glib-2.0",
+                    "/usr/lib/x86_64-linux-gnu/glib-2.0/include",
+                    "${workspaceFolder}/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         },
         {
             "name": "window",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/x86_64-w64-mingw32/include",
+                "/usr/i686-w64-mingw32/include",
                 "/usr/i686-w64-mingw32/sys-root/mingw/include/gtk-3.0",
                 "/usr/i686-w64-mingw32/sys-root/mingw/include/cairo",
                 "/usr/i686-w64-mingw32/sys-root/mingw/include/pango-1.0",
@@ -56,8 +89,8 @@
             ],
             "defines": [],
             "compilerPath": "/usr/bin/x86_64-w64-mingw32-gcc",
-            "cStandard": "c17",
-            "cppStandard": "c++14",
+            
+ 
             "intelliSenseMode": "windows-gcc-x64"
         }
     ],

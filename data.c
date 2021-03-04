@@ -24,24 +24,38 @@ ssize_t SendClient(int sock,Client *client)
 ssize_t SendFile(int sock,char *pathname)
 {
     Data data;
-    data.type = File;
+    struct stat fileStats;
     int fd = open(pathname, O_RDONLY);
     int  sizeSent,sizeRemaining;
+    #if defined(_WIN32)
+    int sizeRead;
+    char buff[BUFFSIZE];
+    #endif
     char *filename = strrchr(pathname,'/');
     off_t offset = 0;
+
+    data.type = File;
     if (fd == -1)
     {
         printf("%d:File %s not found",errno,pathname);
         return -1;
     }
-    struct stat fileStats;
 
     fstat(fd,&fileStats);
     write(sock,&data,sizeof(data));
     write(sock,&fileStats,sizeof(struct stat));
     filename = filename == NULL ? pathname: filename + 1;
     SendText(sock,filename);
+    #if defined(_WIN32)
+    do
+    {
+        sizeRead = read(fd,buff,BUFFSIZE);
+        write(sock,buff,BUFFSIZE);
+    } while (sizeRead);
+    
+    #else
     sizeSent = sendfile(sock,fd,NULL,fileStats.st_size);
+    #endif
     close(fd);
 }
 

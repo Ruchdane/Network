@@ -8,7 +8,7 @@ struct MS
 	Client **clients;
 } *ManagerServer;
 
-void end(int SIG)
+static void end(int SIG)
 {
 
 	printf("End called\n");
@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
 	ManagerServer = malloc(sizeof *ManagerServer);
 	ManagerServer->clients = NULL;
 	ManagerServer->count = 0;
-	ManagerServer->server = createSocket(36002,NULL,0);    
+	ManagerServer->server = createSocket("36002",NULL,0);    
 	printf("Votre addrese IPv4 sur ");
 	GetIPadress();
 	printf("Binded\n");

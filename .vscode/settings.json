@@ -12,6 +12,11 @@
         "ws2tcpip.h": "c",
         "stdio.h": "c",
         "semaphore.h": "c",
-        "fcntl.h": "c"
+        "fcntl.h": "c",
+        "sendfile.h": "c",
+        "ifaddrs.h": "c",
+        "netdb.h": "c",
+        "socket.h": "c",
+        "features.h": "c"
     }
 }
