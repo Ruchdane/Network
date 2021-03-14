@@ -2,7 +2,7 @@
 #define DATARUCHDANE
 
 #include "reseaux.h"
-#include <>
+
 typedef enum  DataType {Id,Test,ClientListe,File} DataType;
 
 #define BUFFSIZE  1024

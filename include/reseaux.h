@@ -43,6 +43,10 @@
 
 #define log(message) fprintf(stderr,"#%s %d:%s\n",message, GETSOCKETERRNO(),strerror GETSOCKETERRNO() );
 
+struct AdapterList { 
+    char *nom, *IPV4, *IPV6;
+};
+
 typedef struct User{
     char nom[MAX_LENGTH];
     int macAdresse;
@@ -50,7 +54,8 @@ typedef struct User{
 
 SOCKET createSocket(char* port,char *adr,int type);
 int InfoSocket(int sock);
-char *GetIPadress();
+struct AdapterList *GetIPadress(int *count);
 // int cree_socket_tcp_ip();
+
 
 #endif // !RESEAUXRUCHDANE

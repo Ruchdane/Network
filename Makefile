@@ -14,29 +14,29 @@ NETWORKLIBS =
 endif
 
 CFLAGS = -g -pthread $(GTKCFLAGS)
-LIBS = $(GTKLIBS) $(NETWORKLIBS)
+LIBS = -Iinclude $(GTKLIBS) $(NETWORKLIBS)
 
+vpath %.c src
+vpath %.o bin
+vpath %.h include
 
-# %.o : %.c
-# 	$(CC)  $(CFLAGS) -c $^   $@ $(LIBS)
+%.o : %.c
+	$(CC)  $(CFLAGS) -c $^ -o bin/$@ $(LIBS)
 
 server : reseaux.o server.o data.o
-	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
+	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
 
 client : client.o reseaux.o data.o
-	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
+	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
 
 send : send.o reseaux.o data.o
-	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
+	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
 
 receive : receive.o reseaux.o data.o
-	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
+	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
 
 zender : zender.o
-	$(CC)  $(CFLAGS) $^ -o $@ $(LIBS)
+	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
 
 clean :
-	rm *.o
-
-properClean : clean
-	rm server  client  send  receive  zender
+	rm bin/*
