@@ -1,20 +1,16 @@
 all :server client send receive zender
+CFLAGS = -g -pthread $(GTKCFLAGS)
+LIBS = -Iinclude $(GTKLIBS) $(NETWORKLIBS)
 
-ifeq ($(platform),windows)
-CC = i686-w64-mingw32-gcc
-GTKCFLAGS = `export PKG_CONFIG_PATH=/usr/i686-w64-mingw32/sys-root/mingw/lib/pkgconfig && pkg-config --cflags gtk+-3.0 pangocairo` -pipe -pthread
-GTKLIBS = `export PKG_CONFIG_PATH=/usr/i686-w64-mingw32/sys-root/mingw/lib/pkgconfig && pkg-config --libs gtk+-3.0 pangocairo`
-
+GTKCFLAGS = `pkg-config --cflags gtk+-3.0` -pipe 
+GTKLIBS = ` pkg-config --libs gtk+-3.0`
+ifeq ($(OS),Windows_NT)
 NETWORKLIBS = -lws2_32 -liphlpapi
 else
-CC = gcc
-GTKCFLAGS = `pkg-config --cflags gtk+-3.0` -rdynamic -pipe 
-GTKLIBS = ` pkg-config --libs gtk+-3.0`
+GTKCFLAGS += -rdynamic 
 NETWORKLIBS = 
 endif
 
-CFLAGS = -g -pthread $(GTKCFLAGS)
-LIBS = -Iinclude $(GTKLIBS) $(NETWORKLIBS)
 
 vpath %.c src
 vpath %.o bin
@@ -24,19 +20,19 @@ vpath %.h include
 	$(CC)  $(CFLAGS) -c $^ -o bin/$@ $(LIBS)
 
 server : reseaux.o server.o data.o
-	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
+	$(CC)  $(CFLAGS) bin/reseaux.o bin/server.o bin/data.o -o bin/$@ $(LIBS)
 
 client : client.o reseaux.o data.o
-	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
+	$(CC)  $(CFLAGS)  bin/client.o bin/reseaux.o bin/data.o -o bin/$@ $(LIBS)
 
 send : send.o reseaux.o data.o
-	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
+	$(CC)  $(CFLAGS) bin/send.o bin/reseaux.o bin/data.o -o bin/$@ $(LIBS)
 
 receive : receive.o reseaux.o data.o
-	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
+	$(CC)  $(CFLAGS) bin/receive.o bin/reseaux.o bin/data.o -o bin/$@ $(LIBS)
 
 zender : zender.o
-	$(CC)  $(CFLAGS) $^ -o bin/$@ $(LIBS)
+	$(CC)  $(CFLAGS) bin/zender.o -o bin/$@ $(LIBS)
 
 clean :
-	rm bin/*
+	rm bin/*.o

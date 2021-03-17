@@ -54,7 +54,8 @@ typedef struct User{
 
 SOCKET createSocket(char* port,char *adr,int type);
 int InfoSocket(int sock);
-struct AdapterList *GetIPadress(int *count);
+struct AdapterList *GetAdapter(int *count);
+void DisplayNetworkInfo();
 // int cree_socket_tcp_ip();
 
 

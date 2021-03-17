@@ -17,9 +17,9 @@ int main(int argc, char *argv[])
 	printf("Donnez un identifiant(votre nom) :");
 	scanf("%s", nom);
 	if(argc == 3)
-		sock = createSocket(atoi(argv[1]),argv[2],1);
+		sock = createSocket(argv[1],argv[2],1);
 	else
-		sock = createSocket(36002, HOME, 1);
+		sock = createSocket("36002", HOME, 1);
 
 	printf("Connecter\n");
 	SendText(sock,nom);

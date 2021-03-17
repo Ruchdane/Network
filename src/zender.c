@@ -8,9 +8,9 @@ int main(int argc,char *argv[]){
 
     gtk_init(&argc, &argv);
     #if defined(_WIN32)
-    gtk_builder_add_from_file(builder,"zender.glade",NULL);
+    gtk_builder_add_from_file(builder,"./glade/glade",NULL);
     #else
-    builder =  gtk_builder_new_from_file("zender.glade");
+    builder =  gtk_builder_new_from_file("./glade/zender.glade");
     #endif
     
     window = GTK_WIDGET(gtk_builder_get_object(builder,"WindowMain"));

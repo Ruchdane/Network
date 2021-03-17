@@ -37,7 +37,7 @@ int main(int argc, char const *argv[])
 	ManagerServer = malloc(sizeof *ManagerServer);
 	ManagerServer->clients = NULL;
 	ManagerServer->count = 0;
-	ManagerServer->server = createSocket(36002,HOME,0);    
+	ManagerServer->server = createSocket("36002",HOME,0);    
 	printf("Binded\n");
 	while (true)
 	{

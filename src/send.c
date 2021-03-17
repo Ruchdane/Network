@@ -45,8 +45,8 @@ int main(int argc, char const *argv[])
 	ManagerServer->clients = NULL;
 	ManagerServer->count = 0;
 	ManagerServer->server = createSocket("36002",NULL,0);    
-	printf("Votre addrese IPv4 sur ");
-	GetIPadress();
+	
+	DisplayNetworkInfo();
 	printf("Binded\n");
 	while (true)
 	{

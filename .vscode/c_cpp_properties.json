@@ -3,6 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
+                "include",
                 "/usr/include/gtk-3.0",
                 "/usr/include/at-spi2-atk/2.0",
                 "/usr/include/at-spi-2.0",
@@ -33,10 +34,6 @@
             
             "intelliSenseMode": "gcc-x64",
             "compilerArgs": [],
-            "intelliSenseModeIsExplicit": true,
-            "cStandardIsExplicit": true,
-            "cppStandardIsExplicit": true,
-            "compilerPathIsExplicit": true,
             "browse": {
                 "path": [
                     "/usr/include/gtk-3.0",
@@ -69,6 +66,7 @@
         {
             "name": "window",
             "includePath": [
+                "include",
                 "${workspaceFolder}/**",
                 "/usr/i686-w64-mingw32/include",
                 "/usr/i686-w64-mingw32/sys-root/mingw/include/gtk-3.0",
