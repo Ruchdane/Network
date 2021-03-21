@@ -1,10 +1,12 @@
 all :server client send receive zender
-CFLAGS = -g -pthread $(GTKCFLAGS)
+CC = gcc
+CFLAGS = -ggdb   $(GTKCFLAGS)
 LIBS = -Iinclude $(GTKLIBS) $(NETWORKLIBS)
 
 GTKCFLAGS = `pkg-config --cflags gtk+-3.0` -pipe 
 GTKLIBS = ` pkg-config --libs gtk+-3.0`
 ifeq ($(OS),Windows_NT)
+CFLAGS += -llibwinpthread
 NETWORKLIBS = -lws2_32 -liphlpapi
 else
 GTKCFLAGS += -rdynamic 

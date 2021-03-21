@@ -17,6 +17,8 @@
         "ifaddrs.h": "c",
         "netdb.h": "c",
         "socket.h": "c",
-        "features.h": "c"
+        "features.h": "c",
+        "cmath": "c",
+        "*.tcc": "c"
     }
 }
