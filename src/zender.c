@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <stdbool.h>
+#include "reseaux.h"
 // #include "data.h"
 
 int main(int argc,char *argv[]){
@@ -7,11 +8,7 @@ int main(int argc,char *argv[]){
     GtkWidget *window;
 
     gtk_init(&argc, &argv);
-    #if defined(_WIN32)
-    gtk_builder_add_from_file(builder,"./glade/glade",NULL);
-    #else
     builder =  gtk_builder_new_from_file("./glade/zender.glade");
-    #endif
     
     window = GTK_WIDGET(gtk_builder_get_object(builder,"WindowMain"));
     gtk_builder_connect_signals(builder,NULL);

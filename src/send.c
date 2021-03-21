@@ -22,6 +22,7 @@ static void end(int SIG)
 	free(ManagerServer->clients);
 	close(ManagerServer->server);
 	free(ManagerServer);
+	RPlatform(WSACleanup(),);
 	exit(0);
 }
 
@@ -40,13 +41,14 @@ int main(int argc, char const *argv[])
 	}
 	path = (char *)argv[argc - 1];
 	signal(SIGINT,end);
+	ApiInit();
 	// signal(SIGSEGV,end);
 	ManagerServer = malloc(sizeof *ManagerServer);
 	ManagerServer->clients = NULL;
 	ManagerServer->count = 0;
 	ManagerServer->server = createSocket("36002",NULL,0);    
 	
-	DisplayNetworkInfo();
+	// DisplayNetworkInfo();
 	printf("Binded\n");
 	while (true)
 	{
@@ -54,12 +56,14 @@ int main(int argc, char const *argv[])
 		listen(ManagerServer->server,5);
 		printf("Listening\n");
 		client = accept(ManagerServer->server, (struct sockaddr*)&addrClient, &size);
+		printf("New CLient trying to connect... \n");
+		
 		if(client == -1)
 		{
 			printf("Socket occupe");
 			end(0);
 		}
-		read(client,&data,sizeof(data));
+		recv(client,&data,sizeof(data),0);
 		if(data.type == Test && (argc == 2 || strcmp(GetText(client,data),argv[2])))
 		{
 			ManagerServer->clients = AddClient(ManagerServer->clients,"Ok",client,&ManagerServer->count);
@@ -70,6 +74,8 @@ int main(int argc, char const *argv[])
 		}
 		else
 		{
+			Log("");
+			printf("Connection refused\n");
 			SendText(client,"Sorry");
 			close(client);
 		}
@@ -83,4 +89,5 @@ void *ClientThread(void *param)
 	Data data;
 	Client *client = (Client *)param;
 	SendFile(client->sock,path);
+	pthread_exit(NULL);
 }

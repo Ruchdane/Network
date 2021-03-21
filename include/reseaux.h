@@ -26,8 +26,18 @@
 
 #define ISINVALIDSOCKET(s) (s == INVALID_SOCKET)
 #define CLOSESOCKET(s) closesocket(s)
-#define GETSOCKETERRNO() (WSAGetLastError())
+// #define GETSOCKETERRNO() (WSAGetLastError())
+#define ApiInit(instruction)WSADATA d;\
+    if (WSAStartup(MAKEWORD(2, 2), &d)) {\
+        Log("Failed to initialize winsoket api");\
+        instruction\
+    }
+//execute a single instruction the first on
+// windows and the other on unix
+#define RPlatform(windows,unix) windows;
 #else
+#define RPlatform(windows,unix) unix;
+#define ApiInit(instruction)
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -37,14 +47,15 @@
 
 #define ISINVALIDSOCKET(s) (s < 0)
 #define CLOSESOCKET(s) close(s)
-#define GETSOCKETERRNO() (errno)
 #define SOCKET int
 #endif
+#define GETSOCKETERRNO() (errno)
 
-#define log(message) fprintf(stderr,"#%s %d:%s\n",message, GETSOCKETERRNO(),strerror GETSOCKETERRNO() );
+#define Log(message)  printf("\t%s %d:%s\n",message, GETSOCKETERRNO(),strerror GETSOCKETERRNO() );
 
 struct AdapterList { 
-    char *nom, *IPV4, *IPV6;
+    RPlatform(PWCHAR nom,char *nom)
+    char *IPV4, *IPV6;
 };
 
 typedef struct User{

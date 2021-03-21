@@ -11,14 +11,16 @@ SOCKET createSocket(char* port,char *adr,int type){
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
     
+    ApiInit(return -1;);
+    
     if(getaddrinfo(adr ? adr:INADDR_ANY,port,&hints,&addr)){
-        log("getaddrinfo() echec");
+        Log("getaddrinfo() fail due to");
         return 1;
     }
         
     sock = socket(addr->ai_family,addr->ai_socktype,addr->ai_protocol);
     if(ISINVALIDSOCKET(sock)){
-        log("Ereur Lors de la Creation du socket");
+        Log("Ereur Lors de la Creation du socket");
         return -1;
     }
     #ifdef _WIN32
@@ -26,14 +28,13 @@ SOCKET createSocket(char* port,char *adr,int type){
     #else
     setsockopt(sock,SOL_SOCKET,SO_REUSEADDR,NULL,SOCK_STREAM);
     #endif // DEBUG
-    log("sdqd");
     if(!type) connection = bind(sock,addr->ai_addr,addr->ai_addrlen);
     
     else connection = connect(sock,addr->ai_addr,addr->ai_addrlen);
     
     if(connection){
         CLOSESOCKET(sock);
-        log("Erreur Lors de la conection");
+        Log("Ehec de la connection ");
         return -1;
     }
     InfoSocket(sock);
@@ -47,7 +48,7 @@ int InfoSocket(int sock){
     longueur = sizeof(struct sockaddr_in);
     if (getsockname(sock, (struct sockaddr*)&adresse, &longueur) < 0)
     {
-        log("Erreur getsockname ");
+        Log("Erreur getsockname ");
         return -1;
     }
     printf("IP = %s, Port = %u\n", inet_ntoa(adresse.sin_addr),ntohs(adresse.sin_port));
@@ -60,14 +61,9 @@ struct AdapterList *GetAdapter(int *count)
     struct AdapterList *result = NULL;
 	char ap[100];
     *count = 0;
-    #if defined(_WIN32)//initialise winsocket
-    WSADATA d;
-    if (WSAStartup(MAKEWORD(2, 2), &d)) {
-        log("Failed to initialize winsoket api");
-        return NULL;
-    }
+    ApiInit(return NULL;);
     
-
+    #if defined(_WIN32)
     //get adapters or adresses
     DWORD asize = 20000;
     PIP_ADAPTER_ADDRESSES adapters;
@@ -95,7 +91,7 @@ struct AdapterList *GetAdapter(int *count)
     struct ifaddrs *adapters;
 
     if (getifaddrs(&adapters) == -1) {
-        log("getifaddrs call failed\n");
+        Log("getifaddrs call failed\n");
         return NULL;
     }
     struct ifaddrs *adapter = adapters;
@@ -104,8 +100,7 @@ struct AdapterList *GetAdapter(int *count)
     while (adapter) {
         result = realloc(result,(++(*count)) * sizeof(* result));
         #if defined(_WIN32)//Looping through adresses
-        result[*count - 1].nom = malloc(strlen((char*)adapter->FriendlyName));
-        sprintf(result[*count - 1].nom,"%S",adapter->FriendlyName);
+        result[*count - 1].nom = wcsdup(adapter->FriendlyName); 
 
         PIP_ADAPTER_UNICAST_ADDRESS address = adapter->FirstUnicastAddress;
         while (address) {
@@ -166,10 +161,12 @@ void DisplayNetworkInfo(){
 	int count;
 	struct AdapterList *adapter = GetAdapter(&count);
 	for (int i = 0; i < count; i++){
-		printf("\n%s\n",adapter[i].nom,adapter[i].IPV6);
+        
+		RPlatform(printf("\n%S\n",adapter[i].nom),
+		printf("\n%s\n",adapter[i].nom));
         if(adapter[i].IPV4) printf("\tIPv4: %s\n",adapter[i].IPV4);
         if(adapter[i].IPV6) printf("\tIPv6: %s\n",adapter[i].IPV6);
-		free(adapter[i].IPV6);free(adapter[i].nom);free(adapter[i].IPV4);
+		// free(adapter[i].IPV6);free(adapter[i].nom);free(adapter[i].IPV4);
 	}
 	free(adapter);
 }
