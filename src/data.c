@@ -49,6 +49,7 @@ ssize_t SendFile(int sock,char *pathname)
 
     fstat(fd,&fileStats);
     send(sock,(char*)&data,sizeof(data),0);
+    printf("sending %db\n",fileStats.st_size);
     send(sock,(char*)&fileStats,sizeof(struct stat),0);
     filename = filename == NULL ? pathname: filename + 1;
     SendText(sock,filename);

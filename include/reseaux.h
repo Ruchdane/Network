@@ -48,6 +48,7 @@
 #define ISINVALIDSOCKET(s) (s < 0)
 #define CLOSESOCKET(s) close(s)
 #define SOCKET int
+#define min(a,b) (a > b ? b:a)
 #endif
 #define GETSOCKETERRNO() (errno)
 
