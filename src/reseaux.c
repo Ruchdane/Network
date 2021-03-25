@@ -37,7 +37,7 @@ SOCKET createSocket(char* port,char *adr,int type){
         Log("Ehec de la connection ");
         return -1;
     }
-    InfoSocket(sock);
+    // InfoSocket(sock);
 
     return sock;
 }
@@ -161,12 +161,14 @@ void DisplayNetworkInfo(){
 	int count;
 	struct AdapterList *adapter = GetAdapter(&count);
 	for (int i = 0; i < count; i++){
-        
-		RPlatform(printf("\n%S\n",adapter[i].nom),
-		printf("\n%s\n",adapter[i].nom));
-        if(adapter[i].IPV4) printf("\tIPv4: %s\n",adapter[i].IPV4);
-        if(adapter[i].IPV6) printf("\tIPv6: %s\n",adapter[i].IPV6);
-		// free(adapter[i].IPV6);free(adapter[i].nom);free(adapter[i].IPV4);
+        if(adapter[i].IPV4 || adapter[i].IPV6){
+		RPlatform(printf("%S : ",adapter[i].nom),
+		printf("%s : ",adapter[i].nom));
+        if(adapter[i].IPV4) printf("IPv4 = %s ",adapter[i].IPV4);
+        if(adapter[i].IPV6) printf("IPv6 = %s",adapter[i].IPV6);
+        printf("\n");
+        }
+		free(adapter[i].IPV6);free(adapter[i].nom);free(adapter[i].IPV4);
 	}
 	free(adapter);
 }

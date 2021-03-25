@@ -49,7 +49,7 @@ ssize_t SendFile(int sock,char *pathname)
 
     fstat(fd,&fileStats);
     send(sock,(char*)&data,sizeof(data),0);
-    printf("sending %db\n",fileStats.st_size);
+    printf("File Size  %d b\n",fileStats.st_size);
     send(sock,(char*)&fileStats,sizeof(struct stat),0);
     filename = filename == NULL ? pathname: filename + 1;
     SendText(sock,filename);
@@ -117,7 +117,7 @@ Client **AddClient(Client **clients,char *name,int sock,int *count)
     Client *nouveau;
     nouveau = malloc(sizeof(*nouveau));
     nouveau->id = *count;
-    nouveau->name = name;
+    nouveau->name = strdup(name);
     nouveau->sock = sock;
     return AddClientPointer(clients,nouveau,count);
 }

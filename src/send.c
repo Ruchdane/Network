@@ -26,33 +26,68 @@ static void end(int SIG)
 	exit(0);
 }
 
-int main(int argc, char const *argv[])
+static void print_usage(){
+	printf(" Usage : send  [-s] [-p  <Port>]  <File Path>\n");
+	printf(" Options:\n");
+	printf("  -s secure upload\n  -p set alternative port to use\n");
+}
+
+int main(int argc, char *argv[])
 {
 
 	struct sockaddr_in addrClient;
 	int client;
 	Client *tmp;
 	Data data;
+	char option,*port = strdup("36002"), *passwd,*sentpasswd,*name;
+	bool isSecure = false;
 	socklen_t size = sizeof(struct sockaddr);
-	if(argc != 2 && argc != 3)
-	{
-		printf("send usage\n-send <File name>\n-send <File name> <Pasword>\n");
-		exit(0);
+	if(argc == 1){
+		print_usage();
+		return 0;
 	}
-	path = (char *)argv[argc - 1];
+	while((option = getopt(argc,argv,"sp: "))!= -1) 
+		switch (option){
+			case 's':
+				isSecure = true;
+				break;
+			case 'p':
+				free(port);
+				port = strdup(optarg);
+				break;
+			default:
+				printf("Unknown option '%c'\n",option);
+				print_usage();
+				return 0;
+				break;
+			}
+	if(!argv[optind]) {
+		printf("The file path is necessary\n");
+		print_usage();
+		return 0;
+	}
+
+	path = argv[optind];
+	if(access(path,F_OK)){
+		printf("File does't exist\n");
+		free(port);
+		return 0;
+	}
+
+	if(isSecure) passwd = getpass("Entrez le mot de passe :");
+
 	signal(SIGINT,end);
 	ApiInit();
 	// signal(SIGSEGV,end);
 	ManagerServer = malloc(sizeof *ManagerServer);
 	ManagerServer->clients = NULL;
 	ManagerServer->count = 0;
-	ManagerServer->server = createSocket("36002",NULL,0);    
+	ManagerServer->server = createSocket(port,NULL,0);    
 	
-	// DisplayNetworkInfo();
-	printf("Binded\n");
+	DisplayNetworkInfo();
+	printf("Binded to port %s\n",port);
 	while (true)
 	{
-
 		listen(ManagerServer->server,5);
 		printf("Listening\n");
 		client = accept(ManagerServer->server, (struct sockaddr*)&addrClient, &size);
@@ -60,34 +95,44 @@ int main(int argc, char const *argv[])
 		
 		if(client == -1)
 		{
-			printf("Socket occupe");
+			Log("Socket occupe");
 			end(0);
 		}
 		recv(client,&data,sizeof(data),0);
-		if(data.type == Test && (argc == 2 || strcmp(GetText(client,data),argv[2])))
+		if(data.type == Test)
+			name = GetText(client,data);
+		recv(client,&data,sizeof(data),0);
+		if(data.type == Test) 
 		{
-			ManagerServer->clients = AddClient(ManagerServer->clients,"Ok",client,&ManagerServer->count);
+			if(isSecure){
+				sentpasswd = GetText(client,data);
+				if(strcmp(passwd,sentpasswd)){
+					printf("%s gave the wrong password \nConection  refused\n",name);
+					SendText(client,"Sorry");
+					close(client);
+					free(name);
+					continue;
+				}
+				free(sentpasswd);
+			}
+			ManagerServer->clients = AddClient(ManagerServer->clients,name,client,&ManagerServer->count);
 			tmp = ManagerServer->clients[ManagerServer->count - 1];
 			if(sem_init(&tmp->lock, 0,1) != 0) fprintf(stderr,"Ereur lors de la creation de la semaphore\n");
-			printf("nouvelle conection\n",tmp->name);
 			pthread_create(&tmp->cthread,NULL,ClientThread,tmp);
-		}
-		else
-		{
-			Log("");
-			printf("Connection refused\n");
-			SendText(client,"Sorry");
-			close(client);
+			free(name);
 		}
 	}
 	end(0);
 	return 0;
 }
-
+ 
 void *ClientThread(void *param)
 {
 	Data data;
 	Client *client = (Client *)param;
+	char * filename = strrchr(path,'/');
+	filename = filename == NULL ? path: filename + 1;
+	printf("Sending %s to %s\n",filename,client->name);
 	SendFile(client->sock,path);
 	pthread_exit(NULL);
 }
