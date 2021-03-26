@@ -1,23 +1,34 @@
 # Network
 
-A tcp client and server whith two command line app that can be used to [send](send.c) and [receive](receive.c) data over nework without any data cost
+A tcp client and server command line utilities that can be used to [send](./src/send.c) and [receive](./src/receive.c) data over nework without any data cost
 
 ## Send
 
 ```
-usage send <file name>
-usage send <file name> <password>
+Usage : send  [-s] [-p  <Port>]  <File Path>
+ Options:
+  -s secure upload
+  -p set alternative port to use
+
 ```
 ## Receive
 
 ```
-usage receive <IP Adresse>
-usage send <IP Adresse> <password>
+ Usage : receive  [-s] [-p  <Port>] [-d <destination path>] <IP address> 
+ Options:
+  -s secure download
+  -p set alternative port used by the sender
+  -d set destination directory
+
+
 ```
-``The ip adress is shown on the send execution``
+The ip adress is shown on the send execution
 ### Build
 
-It comes with a makefile so to build you just use the command ```make```
+It comes with a makefile so to build you just use the command 
+```
+make send receive
+```
 
 ## Contact
 [Email](ruchdaneabiodun@gmail.com)
