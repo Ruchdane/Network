@@ -7,16 +7,16 @@ static void end(int SIG)
 }
 
 static void print_usage(){
-	printf(" Usage : receive  [-s] [-p  <Port>] <IP address> \n");
+	printf(" Usage : receive  [-s] [-p  <Port>] [-d <destination path>] <IP address> \n");
 	printf(" Options:\n");
-	printf("  -s secure download\n  -p set alternative port used by the sender\n");
+	printf("  -s secure download\n  -p set alternative port used by the sender\n  -d set destination directory\n");
 }
 
 int main(int argc, char *argv[])
 { 
 	ssize_t result;
-	Data data;
-	char option,*port = strdup("36002"), *passwd;
+	Data data;  
+	char option,*port = strdup("36002"), *passwd,*path = NULL;
 	bool isSecure = false;
 	ApiInit();
 	//Argparsing
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 		print_usage();
 		return 0;
 	}
-	while((option = getopt(argc,argv,"sp: "))!= -1) 
+	while((option = getopt(argc,argv,"sp:d:"))!= -1) 
 		switch (option){
 			case 's':
 				isSecure = true;
@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
 			case 'p':
 				free(port);
 				port = strdup(optarg);
+				break;
+			case 'd':
+				printf("directory is %s\n",optarg);
+				path = strdup(optarg);
 				break;
 			default:
 				printf("Unknown option '%c'\n",option);
@@ -45,6 +49,11 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 	//Argparsing end
+	if(path && !IsDir(path)){
+		printf("%s is not a directory\n");
+		free(port);
+		return 0;
+	}
 	sock = createSocket(port,argv[optind],1);
 	free(port);
 	if(ISINVALIDSOCKET(sock)){
@@ -65,7 +74,7 @@ int main(int argc, char *argv[])
 	if(data.type == File)
 	{
 		printf("Incoming File ...\n");
-		GetFile(sock);
+		GetFile(sock,path);
 	}
 	else
 		printf("Conection refused by server\n");

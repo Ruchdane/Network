@@ -1,5 +1,11 @@
 #include "data.h"
+bool IsDir(char *path){
+    struct stat sb;
 
+    if (stat(path, &sb) == 0 && S_ISDIR(sb.st_mode)) 
+        return true;
+    return false;
+}
 ssize_t SendText(int sock,char *message)
 {
     Data data;
@@ -68,7 +74,7 @@ ssize_t SendFile(int sock,char *pathname)
     close(fd);
 }
 
-void GetFile(int sock)
+void GetFile(int sock,char *path)
 {
     Data data;
     struct stat fileStats;
@@ -80,8 +86,21 @@ void GetFile(int sock)
     recv(sock,(char*)&data,sizeof(data),0);
 
     filename = GetText(sock,data);
+    if(path){
+        strcpy(buff,path);
+        if(buff[strlen(buff) - 1] != '/')
+            strcat(buff,"/");
+        strcat(buff,filename);
+        free(filename);
+        filename = strdup(buff);
+    }
     printf("File size %d octet\n",fileStats.st_size);
-    fd = creat(filename,O_WRONLY | S_IRWXU | S_IRWXG | S_IRWXO);
+    if((fd = creat(filename,O_WRONLY | S_IRWXU | S_IRWXG | S_IRWXO)) == -1){
+        Log("Unable to create file");
+        close(sock);
+        free(filename);
+        return;
+    }
     for(sizeRemaining = fileStats.st_size; sizeRemaining;){
         sizeReceived = recv(sock,buff,min(sizeRemaining,BUFFSIZE),0);
         write(fd,buff,min(sizeRemaining,BUFFSIZE));

@@ -29,8 +29,8 @@ Client **AddClient(Client **clients,char *name,int sock,int *count);
 Client **AddClientPointer(Client **clients,Client *client,int *count);
 Client *GetClient(int sock,Data data);
 ssize_t SendFile(int sock,char *pathname);
-void GetFile(int sock);
-
+void GetFile(int sock,char *path);
+bool IsDir(char *path);
 
 
 #endif // !DATARUCHDANE

@@ -68,6 +68,11 @@ int main(int argc, char *argv[])
 	}
 
 	path = argv[optind];
+	if(IsDir(path)){
+		printf("Sorry Directory transfer not yet suported");
+		free(port);
+		return 0;
+	}
 	if(access(path,F_OK)){
 		printf("File does't exist\n");
 		free(port);
@@ -91,13 +96,14 @@ int main(int argc, char *argv[])
 		listen(ManagerServer->server,5);
 		printf("Listening\n");
 		client = accept(ManagerServer->server, (struct sockaddr*)&addrClient, &size);
-		printf("New CLient trying to connect... \n");
 		
 		if(client == -1)
 		{
-			Log("Socket occupe");
+			Log("Socket occupe ");
+			printf("Try using another port using the -p option");
 			end(0);
 		}
+		printf("New CLient trying to connect... \n");
 		recv(client,&data,sizeof(data),0);
 		if(data.type == Test)
 			name = GetText(client,data);
